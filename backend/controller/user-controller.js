@@ -17,6 +17,13 @@ const signinBody=z.object({
     password:z.string()
 })
 
+const updateBody = z.object({
+
+    firstName: z.string().optional(),
+    lastName: z.string().optional(),
+    password: z.string().optional(),
+  });
+  
 async function signup(req, res) {
   try {
     const { success } = signupBody.safeParse(req.body);
@@ -104,7 +111,49 @@ try {
 }
 }
 
+
+
+async function updateUser(req,res){
+    try {
+
+const {success} =updateBody.safeParse(req.body);
+if(!success)
+{
+    return res.json({message:'invalid input'});
+}
+
+        const bodyReq=req.body;
+        const bodyData={};
+        
+        // ZOD REDUCED THIS CODE
+
+        // if(bodyReq.firstName)
+        // {
+        //     bodyData.firstName=bodyReq.firstName;
+        // }
+        // if(bodyReq.lastName)
+        // {
+        //     bodyData.lastName=bodyReq.lastName;
+        // }
+        // if(bodyReq.password)
+        // {
+        //     bodyData.password=bodyReq.password;
+        // }
+
+     await User.updateOne({
+          _id:req.userId  
+        },bodyData)
+
+        return res.json({message:'User updated successfully'});
+
+    } catch (error) {
+        
+        return res.status(400).json({message:'Interal server error'});
+    }
+}
+
 module.exports = {
   signup,
-  signin
+  signin,
+  updateUser
 };
