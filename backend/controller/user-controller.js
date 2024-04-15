@@ -12,6 +12,11 @@ const signupBody = z.object({
   password: z.string(),
 });
 
+const signinBody=z.object({
+    username:z.string().email(),
+    password:z.string()
+})
+
 async function signup(req, res) {
   try {
     const { success } = signupBody.safeParse(req.body);
@@ -63,6 +68,43 @@ async function signup(req, res) {
   }
 }
 
+
+async function signin(req,res)
+{
+try {
+    const {success}=signinBody.safeParse(req.body);
+    if(!success)
+    {
+        return res.status(400).json({
+            message:'invalid input'
+        })
+    }
+
+    const userExist=await User.findOne
+    ({username:req.body.username});
+
+    if(!userExist){
+        return res.status(400).json({message:'User you requested does not exists'});
+    }
+
+    const hashedPassword=userExist.password;
+
+    const compareResult=await bcrypt.compare(req.body.password,hashedPassword);
+    if(!compareResult)
+    {
+        return res.json({message:'Incorrect password entered'});
+    }
+
+    return res.status(200).json({
+        message:'Successfully signed up', token:'jwt'
+    })
+
+} catch (error) {
+    return res.status(404).json({message:'internal server error'});
+}
+}
+
 module.exports = {
   signup,
+  signin
 };
