@@ -1,4 +1,4 @@
-const { User } = require("../db");
+const { User, Account } = require("../db");
 const { z } = require("zod");
 
 const jwt = require("jsonwebtoken");
@@ -54,6 +54,13 @@ async function signup(req, res) {
     });
 
     const userId = user._id;
+
+    await Account.create({
+      userId,
+      balance:1+ Math.random()*1000
+    })
+
+
     const token = jwt.sign(
       {
         userId,
