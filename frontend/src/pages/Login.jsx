@@ -8,7 +8,9 @@ const Login = () => {
       <h2 className='text-3xl font-semibold mb-4 text-center '>LogIn</h2>
       <Input label="UserName"/>
       <Input label="Password"/>
-      <button className=" bg-black text-white w-1/2 ">Log In</button>
+      <div className='flex justify-center'>
+      <button className="justify-center btn bg-black mt-2 text-white w-1/2  hover:text-black">Log In</button>
+      </div>
       <span className='text-gray-600'>Don't have an account? <Link to='/signup' className='hover:text-blue-500'>SignIn</Link></span>
     </div>
       </div>
