@@ -1,13 +1,13 @@
-import React from 'react'
+
 
 const Input = ({label}) => {
   return (
  
-    <label className="form-control w-full max-w-xs">
-    <div className="label">
-      <span className="label-text">{label}</span>
+    <label className="form-control w-full max-w-xs mb-2">
+    <div className="label font-light">
+      <span className="label-text mb-1 text-sm font-semibold">{label}</span>
     </div>
-    <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs" />
+    <input type="text" placeholder="Enter Here" className="input input-bordered w-full max-w-xs" />
   </label>
  
   )
