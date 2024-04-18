@@ -3,13 +3,18 @@ import Input from '../components/Input'
 import { useEffect, useState } from 'react';
 const Main = () => {
 
+
+const [filter,setFilter]=useState("");
+const [balance,setBalance]=useState(0); 
+const [users,setUsers]=useState([]);
+
 useEffect(()=>{
-getUser();
-
-},[])
-
+    getUser(); 
+    getAccount();
+    
+    },[filter])
 const getUser=async()=>{
-    const response=await axios.get('http://localhost:3000/api/v1/user');
+    const response=await axios.get('http://localhost:3000/api/v1/user?filter='+filter.toLowerCase());
     console.log(response
     .data.users);
 
@@ -18,17 +23,27 @@ const getUser=async()=>{
     console.log(users)
 }
 
-const [users,setUsers]=useState([]);
+const getAccount=async()=>{
+  const response=await axios.get('http://localhost:3000/api/v1/account',{
+    headers:{
+      Authorization:"Bearer "+localStorage.getItem("token")
+    }
+  });
+  setBalance(response.data.balance);
+  console.log(response.data);
+}
 
 
   return (
     <div className="m-5 p-5">
       <span className="font-bold text-xl">You Balance</span> :{" "}
-      <span className="font-semibold"> Rs. 5000</span>
+      <span className="font-semibold"> Rs. {balance.toFixed(2)}</span>
       <div className="mt-4 mb-4">
         <span className="text-2xl mr-2">Users</span>
         <input
           type="text"
+          value={filter}
+          onChange={(e)=>setFilter(e.target.value)}
           className="border-2 border-gray-500 w-1/2 rounded-md p-1"
           placeholder="search users"
         />

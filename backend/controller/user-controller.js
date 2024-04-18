@@ -106,10 +106,18 @@ async function signin(req, res) {
       return res.json({ message: "Incorrect password entered" });
     }
 
+    const token= jwt.sign({
+      userId:userExist._id
+    },JWT_SECRET);
+
+   
+
+
     return res.status(200).json({
       message: "Successfully signed up",
-      token: "jwt",
+      token: token,
     });
+
   } catch (error) {
     return res.status(404).json({ message: "internal server error" });
   }
@@ -139,7 +147,7 @@ async function updateUser(req, res) {
 
 async function getAllUser(req, res) {
   try {
-    const filter = req.query.filter || "";
+    const filter = req.query.filter.toLowerCase() || "";
 
     const users = await User.find({
       $or: [

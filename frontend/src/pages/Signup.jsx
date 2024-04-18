@@ -23,8 +23,9 @@ const handleClick=async()=>{
       password
     });
   console.log(response)
-  navigate('/dashboard')
   localStorage.setItem("token",response.data.token);
+  navigate('/')
+
   
 
 

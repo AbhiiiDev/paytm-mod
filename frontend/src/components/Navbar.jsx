@@ -1,6 +1,15 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
+const navigate=useNavigate()
+const handleLogout=()=>{
+
+  localStorage.setItem("token","");
+  navigate('/login');
+}
+
+
   return (
     <div className="navbar bg-base-100 shadow-lg">
     <div className="flex-1">
@@ -24,7 +33,7 @@ const Navbar = () => {
             </a>
           </li>
   
-          <li><a>Logout</a></li>
+          <li><a onClick={handleLogout}>Logout</a></li>
         </ul>
       </div>
     </div>
