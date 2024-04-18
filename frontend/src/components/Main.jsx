@@ -46,7 +46,7 @@ const Main = () => {
       Authorization:'Bearer '+localStorage.getItem("token")
     }
   })
-
+console.log(response.status)
   if(response.statusText==='OK')
   {
     alert('money sent successfully');
