@@ -1,17 +1,18 @@
-import React, { useState,useEffect } from 'react';
+import { useState,useEffect } from 'react';
 import axios from 'axios';
 import Input from '../components/Input';
 
 const Main = () => {
   const [filter, setFilter] = useState("");
   const [balance, setBalance] = useState(0);
+  const [amount,setAmount]=useState(0);
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
     getUser(); 
     getAccount();
-  }, [filter]);
+  }, [filter,amount]);
 
   const getUser = async () => {
     const response = await axios.get('http://localhost:3000/api/v1/user?filter=' + filter.toLowerCase());
@@ -35,6 +36,30 @@ const Main = () => {
     setSelectedUser(null);
   };
 
+  const handleSend=async(user)=>{
+    const response=await axios.post('http://localhost:3000/api/v1/account/transfer',{
+ to:user._id,
+ amount
+    },
+  {
+    headers:{
+      Authorization:'Bearer '+localStorage.getItem("token")
+    }
+  })
+
+  if(response.statusText==='OK')
+  {
+    alert('money sent successfully');
+    closeModal();
+  }
+  else {
+    alert('Insufficient money');
+  }
+
+
+  }
+
+
   return (
     <div className="m-5 p-5">
       <span className="font-bold text-xl">Your Balance</span> :{" "}
@@ -54,7 +79,7 @@ const Main = () => {
         <div key={user.username} className="mt-4 grid grid-flow-col">
           <div className="avatar placeholder flex items-center col-span-11">
             <div className="bg-neutral text-neutral-content rounded-full w-12 ">
-              <span>AY</span>
+              <span>{user.firstName[0]+ user.lastName[0]}</span>
             </div>
             <span className="m-2">{user.firstName} {user.lastName}</span>
           </div>
@@ -65,19 +90,19 @@ const Main = () => {
                 <h2 className="font-bold text-2xl text-center">Send Money!</h2>
                 <div className="avatar placeholder flex items-center col-span-11">
                   <div className="bg-neutral text-neutral-content rounded-full w-12 ">
-                    <span>AY</span>
+                    <span>{user.firstName[0]+ user.lastName[0]}</span>
                   </div>
                   <span className="m-2 font-semibold text-xl">{user.firstName} {user.lastName}</span>
                 </div>
                 <p className="font-semibold">Amount (in Rs)</p>
                 <div className='flex flex-col justify-center'>
-                  <Input />
-                  <button className='btn mt-4 btn-success w-1/2'>Send</button>
+                  <Input onChange={(e)=>setAmount(e.target.value)} />
+                  <button onClick={()=>handleSend(user)} className='btn mt-4 btn-success w-1/2'>Send</button>
                 </div>
                 <div className="modal-action">
                   <form method="dialog">
                     {/* if there is a button in form, it will close the modal */}
-                    <button className="btn" onClick={closeModal}>Close</button>
+                    <button className="btn btn-neutral" onClick={closeModal}>Close</button>
                   </form>
                 </div>
               </div>
