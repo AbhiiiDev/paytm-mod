@@ -5,7 +5,14 @@ const cors=require('cors');
 const app=express();
 
 
-app.use(cors());
+app.use(cors(
+    {
+        origin:"*",
+        methods:["GET","POST"],
+        credentials:true,
+        accessControlAllowOrigin:"*"
+    }
+));
 app.use(express.json()); // body-parser
 
 const apiRoutes=require('./routes');
