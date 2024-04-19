@@ -17,7 +17,9 @@ app.use(express.json()); // body-parser
 
 const apiRoutes=require('./routes');
 
-
+app.get('/',(req,res)=>{
+    res.send('yo, backend is wor    king');
+})
 app.use('/api',apiRoutes);
 
 app.listen(process.env.PORT,()=>{
