@@ -1,13 +1,39 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom';
-
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 const Navbar = () => {
-const navigate=useNavigate()
+const navigate=useNavigate();
+
+const [userName,setUserName]=useState("");
+
+const getUserDetail=async()=>{
+  try {
+    const response = await axios.get(
+      'http://localhost:3000/api/v1/user/profile',
+      {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token")
+        }
+      }
+    );
+    setUserName(response.data.firstName);
+  } catch (error) {
+    console.error("Error fetching user details:", error);
+  }
+};
+
+
+
+useEffect(()=>{
+  getUserDetail();
+},[])
+
 const handleLogout=()=>{
 
   localStorage.setItem("token","");
   navigate('/login');
 }
+
 
 
   return (
@@ -17,7 +43,9 @@ const handleLogout=()=>{
     </div>
     <div className="flex-none">
     <div>
-      <span>Hey, Abhi</span>
+      <span>Hey, { localStorage
+      .getItem("token") ? userName : <Link to='/login'>Login</Link>
+      }</span>
     </div>
       <div className="dropdown dropdown-end">
         <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">

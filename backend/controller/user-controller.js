@@ -183,9 +183,37 @@ async function getAllUser(req, res) {
   }
 }
 
+async function getUserDetail(req,res)
+{
+  const userId=req.userId;
+  console.log(userId)
+
+  const user=await User.findOne({
+    _id:userId
+  })
+  
+  if(!user)
+  {
+    return res.json({
+      message:"Can't find user, some error occured"
+    })
+  }
+
+  if(user)
+  {
+    return res.status(200).json({
+firstName:user.firstName,
+lastName:user.lastName
+    })
+  }
+
+
+}
+
 module.exports = {
   signup,
   signin,
   updateUser,
   getAllUser,
+  getUserDetail
 };

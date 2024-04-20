@@ -11,5 +11,6 @@ router.post('/',UserController.signup);
 router.post('/signin',UserController.signin)
 router.put('/',authMiddleware,UserController.updateUser)
 router.get('/',UserController.getAllUser)
+router.get('/profile',authMiddleware,UserController.getUserDetail)
 
 module.exports=router;
